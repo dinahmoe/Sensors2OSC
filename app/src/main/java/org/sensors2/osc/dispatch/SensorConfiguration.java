@@ -5,31 +5,37 @@ package org.sensors2.osc.dispatch;
  */
 public class SensorConfiguration {
 	private boolean send;
-	private int index;
 	private int sensorType;
 	private String oscParam;
-	private float currentValue;
+	private float currentValue [];
+    private int dimensions;
 
 	public SensorConfiguration() {
+
 	}
 
-	public boolean sendingNeeded(float value) {
+	public boolean sendingNeeded(float value[]) {
 		if (!this.send) {
 			return false;
 		}
-		if (Math.abs(value - this.currentValue) == 0){
-			return  false;
-		}
-		this.currentValue = value;
+        boolean hasChanged = false;
+        for (int i = 0; i < this.dimensions; ++i){
+            if (Math.abs(value[i] - this.currentValue[i]) != 0){
+                hasChanged = true;
+            }
+        }
+
+        if (!hasChanged) {
+           return false;
+        }
+        for (int i = 0; i < this.dimensions; ++i){
+            this.currentValue[i] = value[i];
+        }
 		return true;
 	}
 
 	public void setSend(boolean send) {
 		this.send = send;
-	}
-
-	public int getIndex() {
-		return this.index;
 	}
 
 	public int getSensorType() {
@@ -48,7 +54,14 @@ public class SensorConfiguration {
 		this.sensorType = sensorType;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+    public void setDimensions(int dimensions) {
+        this.dimensions = dimensions;
+        this.currentValue = new float[this.dimensions];
+        for (int i = 0; i < this.dimensions; ++i){
+            this.currentValue[i] = 0.0F;
+        }
+    }
+    public int getDimensions() {
+        return dimensions;
+    }
 }

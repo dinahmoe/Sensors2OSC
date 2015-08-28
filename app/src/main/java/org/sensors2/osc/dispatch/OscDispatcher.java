@@ -8,6 +8,7 @@ import org.sensors2.common.dispatch.DataDispatcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 /**
  * Created by thomas on 07.11.14.
@@ -27,26 +28,27 @@ public class OscDispatcher implements DataDispatcher {
 
 	@Override
 	public void dispatch(Measurement sensorData) {
-		int length = sensorData.getValues().length;
-		for (int i = 0; i < length; i++) {
-			for (SensorConfiguration sensorConfiguration : this.sensorConfigurations) {
-				if (sensorConfiguration.getIndex() == i && sensorConfiguration.getSensorType() == sensorData.getSensorType()) {
-					this.trySend(sensorConfiguration, sensorData.getValues()[i]);
-				}
+		for (SensorConfiguration sensorConfiguration : this.sensorConfigurations) {
+			if (sensorConfiguration.getSensorType() == sensorData.getSensorType()) {
+                float [] trimmedValues = Arrays.copyOfRange(sensorData.getValues(), 0, sensorConfiguration.getDimensions());
+                if (!sensorConfiguration.sendingNeeded(trimmedValues)) {
+                    return;
+                }
+                Message message = new Message();
+                Bundle data = new Bundle();
+                int length = sensorData.getValues().length;
+                data.putFloatArray(Bundling.VALUES, trimmedValues);
+                data.putLong(Bundling.TIMESTAMP, sensorData.getTimestamp());
+                data.putString(Bundling.OSC_PARAMETER, sensorConfiguration.getOscParam());
+                message.setData(data);
+                OscHandler handler = communication.getOscHandler();
+                handler.sendMessage(message);
 			}
 		}
+
 	}
 
-	private void trySend(SensorConfiguration sensorConfiguration, float value) {
-		if (!sensorConfiguration.sendingNeeded(value)) {
-			return;
-		}
-		Message message = new Message();
-		Bundle data = new Bundle();
-		data.putFloat(Bundling.VALUE, value);
-		data.putString(Bundling.OSC_PARAMETER, sensorConfiguration.getOscParam());
-		message.setData(data);
-		OscHandler handler = communication.getOscHandler();
-		handler.sendMessage(message);
+	private void trySend(SensorConfiguration sensorConfiguration, float values[]) {
+
 	}
 }

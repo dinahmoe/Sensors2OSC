@@ -22,7 +22,8 @@ public class OscHandler extends Handler {
 	@Override
 	public void handleMessage(Message message) {
 		Bundle data = message.getData();
-		float value = data.getFloat(Bundling.VALUE);
+		float values[] = data.getFloatArray(Bundling.VALUES);
+        	long timestamp = data.getLong(Bundling.TIMESTAMP);
 		String oscParameter = data.getString(Bundling.OSC_PARAMETER);
 		OscConfiguration configuration = OscConfiguration.getInstance();
 
@@ -30,7 +31,10 @@ public class OscHandler extends Handler {
 			return;
 		}
 		List<Object> changes = new ArrayList<Object>();
-		changes.add(value);
+        	changes.add(timestamp);
+        	for (int i = 0; i < values.length; ++i) {
+            		changes.add(values[i]);
+        	}
 		OSCMessage oscMessage = new OSCMessage("/" + oscParameter, changes);
 		try {
 			configuration.getOscPort().send(oscMessage);

@@ -12,6 +12,7 @@ public final class Bundling {
 	public static final String SENSOR_NAME = "sensorName";
 	public static final String SENSOR_RANGE = "sensorRange";
 	public static final String RESOLUTION = "resolution";
-	public static final String VALUE= "value";
+	public static final String VALUES= "values";
+        public static final String TIMESTAMP = "timestamp";
 	public static final String OSC_PARAMETER = "oscParameter";
 }

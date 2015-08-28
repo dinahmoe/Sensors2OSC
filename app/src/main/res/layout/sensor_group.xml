@@ -12,21 +12,28 @@
         android:orientation="vertical"
         android:paddingLeft="0dp"
         android:paddingRight="0dp">
+            
+            <TextView
+                android:id="@+id/group_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="group"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-        <TextView
-            android:id="@+id/group_name"
+            <TextView
+                android:id="@+id/osc_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="osc_prefix"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+        <ToggleButton
+            android:id="@+id/active"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="group"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-        <TextView
-            android:id="@+id/osc_prefix"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="osc_prefix"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
+            android:layout_gravity="right"
+            />
     </LinearLayout>
 
     <org.apmem.tools.layouts.FlowLayout

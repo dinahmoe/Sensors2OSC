@@ -24,7 +24,6 @@ import org.sensors2.osc.R;
 import org.sensors2.osc.dispatch.Bundling;
 import org.sensors2.osc.dispatch.OscConfiguration;
 import org.sensors2.osc.dispatch.OscDispatcher;
-import org.sensors2.osc.fragments.SensorFragment;
 import org.sensors2.osc.fragments.SensorGroupFragment;
 import org.sensors2.osc.sensors.Settings;
 
@@ -67,6 +66,10 @@ public class StartUpActivity extends FragmentActivity implements SensorActivity,
 		List<Parameters> parameters = new ArrayList<Parameters>();
 		for (Sensor sensor : sensorManager.getSensorList(Sensor.TYPE_ALL)) {
 			parameters.add(new org.sensors2.osc.sensors.Parameters(sensor, this.getApplicationContext()));
+//            if (sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+//                parameters.add(new org.sensors2.osc.sensors.Parameters(600, 9, "OrientationVector", "/orientationVector_sf"));
+//                parameters.add(new org.sensors2.osc.sensors.Parameters(601, 16, "RotationMatrix", "/rotationMatrix_sf"));
+//            }
 		}
 		return parameters;
 	}
@@ -160,14 +163,22 @@ public class StartUpActivity extends FragmentActivity implements SensorActivity,
 		transaction.commit();
 	}
 
-	public void addSensorFragment(SensorFragment sensorFragment) {
-		this.dispatcher.addSensorConfiguration(sensorFragment.getSensorConfiguration());
+	public void addSensorGroupFragment(SensorGroupFragment sensorGroupFragment) {
+		this.dispatcher.addSensorConfiguration(sensorGroupFragment.getSensorConfiguration());
 	}
 
 	@Override
 	public void onSensorChanged(SensorEvent sensorEvent) {
 		if (activeButton.isChecked()) {
-			this.sensorFactory.dispatch(sensorEvent);
+			this.sensorFactory.dispatch(sensorEvent.sensor.getType(), sensorEvent.timestamp, sensorEvent.values);
+//            if (sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+//                float[] rotationV = new float[16];
+//                SensorManager.getRotationMatrixFromVector(rotationV, sensorEvent.values);
+//                float[] orientationValuesV = new float[9];
+//                SensorManager.getOrientation(rotationV, orientationValuesV);
+//                this.sensorFactory.dispatch(600, sensorEvent.timestamp, rotationV);
+//                this.sensorFactory.dispatch(601, sensorEvent.timestamp, orientationValuesV);
+//            }
 		}
 	}
 
