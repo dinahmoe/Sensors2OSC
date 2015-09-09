@@ -38,6 +38,8 @@ public class SensorConfiguration {
 		this.send = send;
 	}
 
+    public boolean getSend() { return this.send; }
+
 	public int getSensorType() {
 		return this.sensorType;
 	}

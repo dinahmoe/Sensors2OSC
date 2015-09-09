@@ -59,4 +59,10 @@ public class SensorGroupFragment extends Fragment {
     public SensorConfiguration getSensorConfiguration() {
         return sensorConfiguration;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.activeButton.setChecked(sensorConfiguration.getSend());
+    }
 }
